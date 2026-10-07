@@ -1,4 +1,4 @@
-import { generateDecryption, generateEncription } from "../common/utils/security/encription.security.js";
+// import { generateDecryption, generateEncription } from "../common/utils/security/encription.security.js";
 import bootstrap from "./app.bootstrap.js";
 bootstrap();
 // const ENC_RESULT = await generateEncription("Hello");
@@ -6,4 +6,3 @@ bootstrap();
 
 // const result =await  generateDecryption(ENC_RESULT);
 // console.log({result});
-

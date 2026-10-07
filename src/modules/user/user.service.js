@@ -24,6 +24,7 @@ export const Signup = async (inputs) => {
     return result
 }
 
+
 export const Login = async (inputs) => {
     const { email, password } = inputs;
     const user = await findOne({
