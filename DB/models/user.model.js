@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { genderEnum, provideEnum } from "../../common/enums/user/user.enum.js";
+import { genderEnum, provideEnum, RoleEnum } from "../../common/enums/user/user.enum.js";
 
 
 
@@ -39,6 +39,11 @@ const userSchema = new mongoose.Schema({
         type: Number,
         enum: Object.values(provideEnum),
         default: provideEnum.System
+    },
+    Role:{
+        type:Number,
+        enum : Object.values(RoleEnum),
+        default:RoleEnum.user,
     },
     converProfilePicture: [String],
     confirmEmail:Date,

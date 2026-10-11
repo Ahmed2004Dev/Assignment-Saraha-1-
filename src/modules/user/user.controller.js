@@ -1,16 +1,19 @@
 import { Router } from "express";
 import { successResponse } from './../../../common/utils/response/success.response.js';
-import { Login, Signup } from "./user.service.js";
+import { profile, rotateToken } from "./user.service.js";
+import { authentication, authorization } from "../../../middleware/authentication.middleware.js";
+import { TokenTypeEnum } from "../../../common/enums/user/security.enms.js";
+import { RoleEnum } from "../../../common/enums/user/user.enum.js";
 const router = Router()
 
-router.post("/signup" , async (req,res,next)=>{
-    const result = await Signup(req.body);
-    return successResponse({res , status:201 , message:"Signup Successfully" , data:result})
+router.get("/", authentication(TokenTypeEnum.Access), authorization([RoleEnum.user]), async (req, res, next) => {
+    const account = await profile(req.user);
+    return successResponse({ res, data: account })
 });
 
-router.post("/login" , async (req,res,next)=>{
-    const result = await Login(req.body);
-    return successResponse({res , status:201 , message:"Login Successfully" , data:result})
-})
+router.get("/rotate", authentication(TokenTypeEnum.Refresh), async (req, res, next) => {
+    const account = await rotateToken(req.user, `${req.protocol}://${req.host}`);
+    return successResponse({ res, data: account });
+});
 
 export default router

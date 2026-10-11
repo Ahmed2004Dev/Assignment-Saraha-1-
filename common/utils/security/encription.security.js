@@ -3,11 +3,11 @@ import { ENC_SECRET_KEY, IVE_LENGTH } from "../../../config/config.service.js";
 
 export const generateEncription = async (plainText) => {
     const iv = crypto.randomBytes(IVE_LENGTH);
-    console.log(iv.toString("hex"));
+    // console.log(iv.toString("hex"));
     const CipherIV = crypto.createCipheriv("aes-256-cbc", ENC_SECRET_KEY, iv)
     let cipherText = CipherIV.update(plainText, "utf8", "hex");
     cipherText += CipherIV.final("hex");
-    console.log({ iv, ivT: iv.toString('hex'), CipherIV, cipherText });
+    // console.log({ iv, ivT: iv.toString('hex'), CipherIV, cipherText });
     return `${iv.toString("hex")}:${cipherText}`
 };
 

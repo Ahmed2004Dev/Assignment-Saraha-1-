@@ -4,11 +4,12 @@ import { userRouter } from "./modules/user/index.js";
 import { authRouter } from "./modules/auth/index.js";
 import { connectDB } from "../DB/connectDB.js";
 import { GlobalErrorHandling } from "../common/utils/response/error.handling.js";
-
+import cors from "cors"
 
 const bootstrap = async () => {
     // Express
     const app = express();
+    app.use(cors())
     app.use(express.json());
 
     // Connect DB
