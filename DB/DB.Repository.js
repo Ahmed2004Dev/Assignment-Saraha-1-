@@ -1,3 +1,6 @@
+
+
+
 export const findOne = async ({
     MODEL,
     filter = {},
@@ -38,3 +41,7 @@ export const createOne = async ({
 }={}) => {
     return await MODEL.createOne(data,option)
 }
+
+export const deleteMany = async ({ MODEL, filter = {} } = {}) => {
+    return await MODEL.deleteMany(filter);
+};

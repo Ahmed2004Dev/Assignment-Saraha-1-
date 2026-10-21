@@ -18,7 +18,7 @@ export const generateDecryption = async (cipherText)=>{
     const deCipherText = crypto.createDecipheriv("aes-256-cbc" , ENC_SECRET_KEY , ivLikeBinary);
     let plainText = deCipherText.update(EncryptData , "hex" , "utf8");
     plainText += deCipherText.final("utf8");
-    console.log({iv , EncryptData , ivLikeBinary , deCipherText , plainText});
+    // console.log({iv , EncryptData , ivLikeBinary , deCipherText , plainText});
     
     return plainText
 }

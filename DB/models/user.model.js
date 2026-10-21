@@ -45,6 +45,9 @@ const userSchema = new mongoose.Schema({
         enum : Object.values(RoleEnum),
         default:RoleEnum.user,
     },
+    ProfilePicture: {
+        type:String
+    },
     converProfilePicture: [String],
     confirmEmail:Date,
     changeCredentialTime : Date,

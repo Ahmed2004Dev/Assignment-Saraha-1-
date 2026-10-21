@@ -21,8 +21,10 @@ export const authentication = (tokenType = TokenTypeEnum.Access) => {
                 break;
             }
             case 'Bearer': {
-                req.user = await decodToken({ token: credentials, tokenType });
-                break;
+               const {user , decoded} = await decodToken({ token: credentials, tokenType });
+               req.user = user
+               req.decoded = decoded 
+               break;
             }
             default: {
                 throw ErrorException({ message: "missing authentication schema" });
@@ -42,4 +44,6 @@ export const authorization = (accessRoles = [])=>{
         next()
     }
 }
+
+
 

@@ -11,6 +11,7 @@ const bootstrap = async () => {
     const app = express();
     app.use(cors())
     app.use(express.json());
+    app.use('/uploads', express.static('../uploads'));
 
     // Connect DB
     await connectDB()
@@ -18,7 +19,6 @@ const bootstrap = async () => {
     // Routers
     app.use("/user" , userRouter);
     app.use("/auth" , authRouter);
-    
     
     
     

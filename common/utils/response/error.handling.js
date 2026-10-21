@@ -1,6 +1,9 @@
 export const GlobalErrorHandling = async (error,req,res,next)=>{
     const status = error?.cause?.status ?? 500;
-    return res.status(status).json({message:error.message || "Somthing went error" , stack:error.stack})
+    return res.status(status).json({message:error.message || "Somthing went error" ,
+         stack:error.stack,
+        extra:error?.cause?.extra || undefined
+        })
 }
 
 export const ErrorException = async ({message="Fail" , status=400 , extra=undefined})=>{
