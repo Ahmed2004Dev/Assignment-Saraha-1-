@@ -27,5 +27,16 @@ export const REFRESH_TOKEN_EXPIRE_IN = parseInt(process.env.REFRESH_TOKEN_EXPIRE
 export const CLOUD_NAME = process.env.CLOUD_NAME;
 export const API_KEY = process.env.API_KEY;
 export const API_SECRET = process.env.API_SECRET;
+// Redis
+export const REDIS_URI = process.env.REDIS_URI
+// NodeMailer
+export const EMAIL_APP_PASSWORD = process.env.EMAIL_APP_PASSWORD
+export const EMAIL_APP = process.env.EMAIL_APP
+export const APPLICATION_NAME = process.env.APPLICATION_NAME
+
+export const TWITTER_LINK = process.env.TWITTER_LINK
+export const INSTRGRAM_LINK = process.env.INSTRGRAM_LINK
+export const FACEBOOK_LINK = process.env.FACEBOOK_LINK
+
 
 

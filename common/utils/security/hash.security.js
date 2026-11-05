@@ -1,4 +1,4 @@
-import { hash } from "bcrypt"
+import { compare, hash } from "bcrypt"
 import { SALT_RANDOM } from "../../../config/config.service.js"
 
 export const generateHash = async ({
@@ -7,3 +7,7 @@ export const generateHash = async ({
 }) => {
     return await hash(plainText, SALT)
 }
+
+export const compareHash = async ({ plaintext, cipherText }={}) => {
+    return await compare(plaintext, cipherText);
+};

@@ -7,28 +7,36 @@ import { generateDecryption } from "../../../common/utils/security/encription.se
 import { logoutEnum } from "../../../common/enums/user/security.enms.js";
 import { tokenModel } from "../../../DB/models/token.model.js";
 import { deleteMany } from "../../../DB/DB.Repository.js";
- 
-export const logout = async ({ flag }, user, { jti, iat }) => {
+import { baseRevokeTokenKey, deleteKey_redis, keys_redis, revokeTokenKey, set_redis } from "../../../common/services/redis.service.js";
+
+export const logout = async ({ flag }, user, { jti, iat, sub }) => {
     let status = 200;
     console.log("Extracted Values:", { jti, iat });
     switch (flag) {
         case logoutEnum.All:
             user.changeCredentialTime = new Date();
             await user.save()
-            await deleteMany({
-                MODEL: tokenModel,
-                filter: { userID: user._id }
-            });
+            // await deleteMany({
+            // MODEL: tokenModel,
+            //     filter: { userID: user._id }
+            // });
+            await deleteKey_redis(await keys_redis(await baseRevokeTokenKey(sub)))
             break;
         default:
-            await create({
-                MODEL: tokenModel,
-                data: {
-                    userID: user._id,
-                    jti,
-                    expiresIn: new Date((iat + REFRESH_TOKEN_EXPIRE_IN) * 1000)
-                }
+            // await create({
+            //     MODEL: tokenModel,
+            //     data: {
+            //         userID: user._id,
+            //         jti,
+            //         expiresIn: new Date((iat + REFRESH_TOKEN_EXPIRE_IN) * 1000)
+            //     }
+            // })
+            await set_redis({
+                key: await revokeTokenKey({ userId: sub, jti }),
+                value: jti,
+                ttl: iat + REFRESH_TOKEN_EXPIRE_IN
             })
+
             status = 201
             break;
     }
@@ -62,17 +70,22 @@ export const profile = async (User) => {
     return User
 }
 
-export const rotateToken = async (user, {iat , jti} ,issuer) => {
+export const rotateToken = async (user, {sub , iat, jti }, issuer) => {
     if ((iat + ACCESS_TOKEN_EXPIRE_IN) * 1000 >= Date.now() + (3000)) {
-        return ConflictException({message:"Current Access token still valid"})
+        return ConflictException({ message: "Current Access token still valid" })
     }
-    await create({
-        MODEL: tokenModel,
-        data: {
-            userID: user._id,
-            jti,
-            expiresIn: new Date((iat + REFRESH_TOKEN_EXPIRE_IN) * 1000)
-        }
+    // await create({
+    //     MODEL: tokenModel,
+    //     data: {
+    //         userID: user._id,
+    //         jti,
+    //         expiresIn: new Date((iat + REFRESH_TOKEN_EXPIRE_IN) * 1000)
+    //     }
+    // })
+    await set_redis({
+        key: await revokeTokenKey({ userId: sub, jti }),
+        value: jti,
+        ttl: iat + REFRESH_TOKEN_EXPIRE_IN
     })
     return CreateLoginCredintial(user, issuer)
 }

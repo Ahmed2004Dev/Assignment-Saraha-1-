@@ -15,5 +15,16 @@ export const signupSechemValidators = {
         phone: generalValidationFileds.phone.required(),
         confirmPassword: generalValidationFileds.confirmPassword("password").required()
     }).required(),
-  
+}
+
+export const resendConfirmEmail = {
+    body: Joi.object().keys({
+        email: generalValidationFileds.email.required(),
+    }).required()
+}
+
+export const confirmEmail = {
+    body: resendConfirmEmail.body.append({
+        otp: generalValidationFileds.otp.required()
+    }).required()
 }

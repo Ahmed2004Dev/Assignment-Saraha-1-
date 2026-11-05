@@ -1,6 +1,8 @@
 import { Types } from "mongoose"
 import Joi from "joi";
 export const generalValidationFileds = {
+    // Otp validatoin
+    otp:Joi.string().pattern(new RegExp(/^\d{6}$/)) ,
     // Login & Sinup Validation (authentication)
     email: Joi.string().email({ minDomainSegments: 2, maxDomainSegments: 3, tlds: { allow: ["com", "net"] } }),
     password: Joi.string().pattern(new RegExp(/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).{8,16}$/)),
