@@ -11,7 +11,7 @@ export const shareProfileValidation = {
 export const profileImageValidation = {
     file: generalValidationFileds.file(fileFieldValidation.image).required()
 }
-
+ 
 export const profileCoverImageValidation = {
     files: Joi.array().items(
         generalValidationFileds.file(fileFieldValidation.image).required()
@@ -30,6 +30,13 @@ export const profileAttachment = {
     }).required()
 }
 
+export const updatePassword = {
+    body:Joi.object().keys({
+        oldPassword:generalValidationFileds.password.required(),
+        password:generalValidationFileds.password.not(Joi.ref("oldPassword")).required(),
+        confirmPassword:generalValidationFileds.confirmPassword("password").required()
+    }).required()
+}
 
 
 

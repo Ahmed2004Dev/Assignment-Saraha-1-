@@ -12,7 +12,8 @@ export const fileFieldValidation = {
 
 
 export const localFieldUpload = ({
-    customPath = "general"
+    customPath = "general",
+    lengthMax = 1
 } = {}) => {
     const storage = multer.diskStorage({
         destination: function (req, file, cb) {
@@ -28,7 +29,7 @@ export const localFieldUpload = ({
             cb(null, uniqeFileName)
         }
     })
-    return multer({ storage })
+    return multer({ storage , limits:{files:lengthMax}})
 }
 
 

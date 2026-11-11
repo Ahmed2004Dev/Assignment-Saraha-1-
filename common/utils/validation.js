@@ -35,7 +35,7 @@ export const generalValidationFileds = {
             "originalname": Joi.string().required(),
             "encoding": Joi.string().required(),
             "mimetype": Joi.string().valid(...Object.values(validation)).required(),
-            // "finalPath": Joi.string().required(),
+            "finalPath": Joi.string().required(),
             "path": Joi.string().required(),
             "destination": Joi.string().required(),
             "filename": Joi.string().required(),

@@ -1,4 +1,7 @@
 
+// import { updateOne } from './DB.Repository';
+
+import { Mongoose } from "mongoose";
 
 
 export const findOne = async ({
@@ -10,6 +13,36 @@ export const findOne = async ({
 } = {}) => {
     let doc;
     doc = MODEL.findOne(filter, option).select(select);
+    if (option.lean) {
+        doc.lean()
+    }
+    return await doc.exec()
+};
+
+export const find = async ({
+    MODEL,
+    filter = {},
+    select = "",
+    option = {},
+    approach = "mongoose"
+} = {}) => {
+    let doc;
+    doc = MODEL.find(filter, option).select(select);
+    if (option.lean) {
+        doc.lean()
+    }
+    return await doc.exec()
+}
+
+export const findOneAndDelete = async ({
+    MODEL,
+    filter = {},
+    select = "",
+    option = {},
+    approach = "mongoose"
+} = {}) => {
+    let doc;
+    doc = MODEL.findOneAndDelete(filter, option).select(select);
     if (option.lean) {
         doc.lean()
     }
@@ -39,9 +72,18 @@ export const createOne = async ({
     data = [{}],
     option = { validateBeforeSave: true },
 }={}) => {
-    return await MODEL.createOne(data,option)
+    return await MODEL.create(data,option)
 }
 
 export const deleteMany = async ({ MODEL, filter = {} } = {}) => {
     return await MODEL.deleteMany(filter);
+};
+
+export const updateOne = async ({
+    MODEL,
+    filter = {},
+    update = {},
+    options = { new: true, runValidators: true },
+} = {}) => {
+    return await MODEL.findOneAndUpdate(filter, update, options);
 };

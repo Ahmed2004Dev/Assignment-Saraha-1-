@@ -3,11 +3,12 @@ import { UserModel } from "../../../DB/models/user.model.js"
 import { ACCESS_TOKEN_EXPIRE_IN, REFRESH_TOKEN_EXPIRE_IN } from "../../../config/config.service.js";
 import { ConflictException, NotFoundException } from "../../../common/utils/response/error.handling.js";
 import { CreateLoginCredintial, decodToken, verfyToken } from "../../../common/utils/security/token.security.js";
-import { generateDecryption } from "../../../common/utils/security/encription.security.js";
+import { generateDecryption, generateEncription } from "../../../common/utils/security/encription.security.js";
 import { logoutEnum } from "../../../common/enums/user/security.enms.js";
 import { tokenModel } from "../../../DB/models/token.model.js";
 import { deleteMany } from "../../../DB/DB.Repository.js";
 import { baseRevokeTokenKey, deleteKey_redis, keys_redis, revokeTokenKey, set_redis } from "../../../common/services/redis.service.js";
+import { compareHash, generateHash } from "../../../common/utils/security/hash.security.js";
 
 export const logout = async ({ flag }, user, { jti, iat, sub }) => {
     let status = 200;
@@ -70,7 +71,7 @@ export const profile = async (User) => {
     return User
 }
 
-export const rotateToken = async (user, {sub , iat, jti }, issuer) => {
+export const rotateToken = async (user, { sub, iat, jti }, issuer) => {
     if ((iat + ACCESS_TOKEN_EXPIRE_IN) * 1000 >= Date.now() + (3000)) {
         return ConflictException({ message: "Current Access token still valid" })
     }
@@ -89,3 +90,23 @@ export const rotateToken = async (user, {sub , iat, jti }, issuer) => {
     })
     return CreateLoginCredintial(user, issuer)
 }
+
+export const updatePassword = async ({ oldPassword, password }, user, issuer) => {
+    if (! await compareHash({ plaintext: oldPassword, cipherText: user.password })) {
+        return ConflictException({ message: "Invalid old password" })
+    }
+
+    for (const hash of user.oldPassword) {
+        if (hash && await compareHash({ plaintext: password, cipherText: hash })) {
+            return ConflictException({ message: "This password already used before" });
+        }
+    }
+    user.oldPassword.push(user.password)
+
+    user.password = await generateHash({ plainText: password });
+    user.changeCredentialTime = new Date();
+    await user.save();
+    await deleteKey_redis(await revokeTokenKey({ userId: user._id }))
+    return await CreateLoginCredintial(user, issuer)
+}
+

@@ -1,13 +1,13 @@
 import Joi from "joi"
 import { generalValidationFileds } from "../../../common/utils/validation.js"
 
+
 export const loginSechemValidators = {
     body: Joi.object().keys({
         email: generalValidationFileds.email.required(),
         password: generalValidationFileds.password.required(),
     }).required()
 }
-
 
 export const signupSechemValidators = {
     body: loginSechemValidators.body.append().keys({
@@ -28,3 +28,11 @@ export const confirmEmail = {
         otp: generalValidationFileds.otp.required()
     }).required()
 }
+
+export const resetForgetPassword = {
+    body: confirmEmail.body.append({
+        password : generalValidationFileds.password.required(),
+        confirmPassword : generalValidationFileds.confirmPassword("password").required()
+    }).required()
+}
+

@@ -2,7 +2,7 @@ import { EmailEnums } from '../enums/user/email.enums.js';
 import { redisClient } from './../../DB/redis.connection.db.js';
 
 export const baseRevokeTokenKey = async (userId) => {
-    return `RevokeTokenKey::${userId}`
+    return `RevokeTokenKey::${userId.toString()}`
 }
 
 export const revokeTokenKey = async ({ userId, jti }) => {
@@ -63,7 +63,7 @@ export const exists_redis = async (key) => {
     }
 }
 
-export const expire_redis = async ({ key, ttl } = {}) => {
+export const expire_redis = async ( key, ttl ) => {
     try {
         return await redisClient.expire(key, ttl)
     } catch (error) {
@@ -122,6 +122,15 @@ export const incr = async (key) => {
         return await redisClient.incr(key)
     } catch (error) {
         console.log(`Fail in redis incr Operatino ${error} `);
+
+    }
+}
+
+export const decr = async (key) => {
+    try {
+        return await redisClient.decr(key)
+    } catch (error) {
+        console.log(`Fail in redis decr Operatino ${error} `);
 
     }
 }

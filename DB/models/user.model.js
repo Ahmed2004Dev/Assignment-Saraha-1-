@@ -49,6 +49,7 @@ const userSchema = new mongoose.Schema({
         type:String
     },
     converProfilePicture: [String],
+    oldPassword:[String],
     confirmEmail:Date,
     changeCredentialTime : Date,
 },

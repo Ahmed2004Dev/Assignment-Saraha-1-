@@ -4,7 +4,8 @@ import {resolve} from "node:path"
 const NODE_ENV = process.env.NODE_ENV;
 
 const envPath = {
-    development : "./devlopment.env"
+    development : "./devlopment.env",
+    product : "./product.env",
 }
 
 config({path:resolve(`./config/${envPath[NODE_ENV]}`)});
@@ -37,6 +38,10 @@ export const APPLICATION_NAME = process.env.APPLICATION_NAME
 export const TWITTER_LINK = process.env.TWITTER_LINK
 export const INSTRGRAM_LINK = process.env.INSTRGRAM_LINK
 export const FACEBOOK_LINK = process.env.FACEBOOK_LINK
+
+
+export const ORIGINS = process.env.ORIGINS?.split(",")||[]
+
 
 
 
