@@ -84,7 +84,7 @@ const bootstrap = async () => {
 
     app.use(GlobalErrorHandling)
     app.use("{/*dummy}", (req, res) => { return res.status(404).json({ Massage: "Invalid routing please try again" }) })
-    app.listen(PORT, () => {
+    app.listen(PORT, '0.0.0.0',() => {
         console.log(`The Server is working at Port ${PORT}👍`);
     })
 }

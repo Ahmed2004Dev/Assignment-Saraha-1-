@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start:dev": "cross-env NODE_ENV=development node --watch-path=. src/main.js",
-    "product:dev": "cross-env NODE_ENV=product node src/main.js"
+    "start:pro": "cross-env NODE_ENV=product pm2 start ./src/main.js -i 0"
   },
   "keywords": [],
   "author": "",
