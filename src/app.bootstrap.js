@@ -12,7 +12,7 @@ import rateLimit, { ipKeyGenerator } from "express-rate-limit";
 // import axios from "axios";
 import geoip from "geoip-lite";
 import { decr, exists_redis, expire_redis, incr } from "../common/services/redis.service.js";
-
+import morgan from "morgan"
 const bootstrap = async () => {
     const fromwhere = async (ip) => {
         try {
@@ -26,14 +26,15 @@ const bootstrap = async () => {
     // Express
 
     const app = express();
-
+app.use(morgan("dev"))
     app.set("trust proxy", true)
+// console.log(app.use(morgan("dev")));
 
     const limiter = rateLimit({
         windowMs: 2 * 60 * 1000,
         limit: async function (req) {
-            const { country } = geoip.lookup(req.ip)
-            return country === "EG" ? 5 : 0
+            const data = geoip.lookup(req.ip)
+            return 100
         },
         statusCode: 500,
         message: "To many Tryal",
